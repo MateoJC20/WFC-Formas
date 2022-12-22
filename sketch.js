@@ -79,7 +79,6 @@ function setup() {
     }
   }
 
-  print(azulejos)
 }
 
 function draw() {
@@ -92,10 +91,9 @@ function draw() {
     celdasDisponibles.sort((a, b) =>{
       return a.opciones.length - b.opciones.length;
     });
-    print(celdasDisponibles)
 
     const celdasPorColapsar = celdasDisponibles.filter((celda)=>{
-      return celda.opciones.length == celdasDisponibles[0].length;
+      return celda.opciones.length == celdasDisponibles[0].opciones.length;
     });
     
     
@@ -111,13 +109,50 @@ function draw() {
         const celdaIndex = x + y * RETICULA;
         const celdaActual = celdas[celdaIndex];
         if(celdaActual.colapsada){
-          Image(
+            const azulejosIndice = celdaActual.opciones[0];
+            const reglasActuales = reglas[azulejosIndice];
+          image(
             azulejos[celdaActual.opciones[0]], 
             x * ancho, 
             y * alto,
             ancho,
             alto
             );
+
+            //Monitor Entriopía UP 
+            if(y > 0){
+              const indiceUP = x + (y - 1) * RETICULA;
+              const celdaUP = celdas[indiceUP];
+              if(!celdaUP.colapsada){
+                
+              }
+              
+            };
+
+            //Monitor Entriopía RIGHT
+            if(x < RETICULA - 1){
+              const indiceRIGHT = (x + 1) + y * RETICULA;
+              const celdaRIGHT = celdas[indiceRIGHT];
+              if(!celdaRIGHT.colapsada){
+              }
+            };
+
+            //Monitor Entriopía DOWN
+            if(y < RETICULA - 1){
+              const indiceDOWN = x + (y + 1) * RETICULA;
+              const celdaDOWN = celdas[indiceDOWN];
+              if(!celdaDOWN.colapsada){
+              }
+            };  
+
+            //Monitor Entriopía LEFT
+            if(x > 0){
+              const indiceLEFT = (x - 1) + y * RETICULA;
+              const celdaLEFT = celdas[indiceLEFT];
+              if(!celdaLEFT.colapsada){
+              }
+            };
+
         }
       }
     
@@ -125,4 +160,16 @@ function draw() {
 
     noLoop();
   }
+}
+function cambiarEntriopia(_celda){
+  const nuevasOpciones = [];
+                for(let i = 0; i < _celda.opciones.length; i++){
+                  if(reglasActuales['UP']==
+                  reglas[_celda.opciones[i]['DOWN']]
+                  ){
+                    const celdaCompatible = _celda.opciones[i];
+                    nuevasOpciones.push(celdaCompatible);
+                  }
+                }
+                _celda.opciones = nuevasOpciones;
 }
