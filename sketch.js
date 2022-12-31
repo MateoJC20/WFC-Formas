@@ -3,6 +3,7 @@ const RETICULA = 8;
 
 const azulejos = [];
 const NA = 11; //número de azulejos
+let opcionesI = [];
 
 let ancho;  //ancho de celdas
 let alto; //altura de celdas
@@ -101,8 +102,6 @@ function setup() {
   ancho = width / RETICULA;
   alto = height / RETICULA;
 
-  let opcionesI = [];
-
   for(let i = 0; i < azulejos.length; i++){
     opcionesI.push(i);
   }
@@ -128,7 +127,8 @@ function draw() {
     });
 
     const celdasPorColapsar = celdasDisponibles.filter((celda)=>{
-      return celda.opciones.length == celdasDisponibles[0].opciones.length;
+      return (
+        celda.opciones.length == celdasDisponibles[0].opciones.length);
     });
     
     
@@ -210,16 +210,22 @@ function draw() {
     }
 
     //noLoop();
+  } else{
+    for(let i = 0; i < RETICULA * RETICULA; i ++){
+      celdas[i] = {
+        colapsada: false,
+        opciones: opcionesI,
+      }
+    }
   }
 }
 function cambiarEntriopia(_celda, _regla, _opuesta){
   const nuevasOpciones = [];
-                for(let i = 0; i < _celda.opciones.length; i++){
-                  if(_regla == reglas[_celda.opciones[i][_opuesta]]
-                  ){
-                    const celdaCompatible = _celda.opciones[i];
-                    nuevasOpciones.push(celdaCompatible);
-                  }
-                }
+    for(let i = 0; i < _celda.opciones.length; i++){
+       if(_regla == reglas[_celda.opciones[i]][_opuesta]) {
+           const celdaCompatible = _celda.opciones[i];
+             nuevasOpciones.push(celdaCompatible);
+            }
+            }
                 _celda.opciones = nuevasOpciones;
 }
