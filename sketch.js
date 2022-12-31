@@ -1,8 +1,8 @@
 const celdas = []; //celdas de 4x4
-const RETICULA = 4;
+const RETICULA = 8;
 
 const azulejos = [];
-const NA = 6; //número de azulejos
+const NA = 11; //número de azulejos
 
 let ancho;  //ancho de celdas
 let alto; //altura de celdas
@@ -49,6 +49,41 @@ const reglas = [
     UP:0,
     RIGHT:0,
     DOWN:1,
+    LEFT:1,
+  },
+  {
+    //Tiles6
+    UP:0,
+    RIGHT:1,
+    DOWN:1,
+    LEFT:0,
+  },
+  {
+    //Tiles7
+    UP:1,
+    RIGHT:1,
+    DOWN:0,
+    LEFT:0,
+  },
+  {
+    //Tiles8
+    UP:1,
+    RIGHT:0,
+    DOWN:0,
+    LEFT:1,
+  },
+  {
+    //Tiles9
+    UP:0,
+    RIGHT:0,
+    DOWN:0,
+    LEFT:0,
+  },
+  {
+    //Tiles10
+    UP:0,
+    RIGHT:1,
+    DOWN:0,
     LEFT:1,
   },
 
@@ -112,19 +147,23 @@ function draw() {
             const azulejosIndice = celdaActual.opciones[0];
             const reglasActuales = reglas[azulejosIndice];
           image(
-            azulejos[celdaActual.opciones[0]], 
+            azulejos[azulejosIndice], 
             x * ancho, 
             y * alto,
             ancho,
             alto
             );
+            
 
             //Monitor Entriopía UP 
             if(y > 0){
               const indiceUP = x + (y - 1) * RETICULA;
               const celdaUP = celdas[indiceUP];
               if(!celdaUP.colapsada){
-                
+                cambiarEntriopia(
+                  celdaUP, 
+                  reglasActuales['UP'], 
+                  'DOWN');
               }
               
             };
@@ -134,6 +173,10 @@ function draw() {
               const indiceRIGHT = (x + 1) + y * RETICULA;
               const celdaRIGHT = celdas[indiceRIGHT];
               if(!celdaRIGHT.colapsada){
+                cambiarEntriopia(
+                  celdaRIGHT, 
+                  reglasActuales['RIGHT'], 
+                  'LEFT');
               }
             };
 
@@ -142,6 +185,10 @@ function draw() {
               const indiceDOWN = x + (y + 1) * RETICULA;
               const celdaDOWN = celdas[indiceDOWN];
               if(!celdaDOWN.colapsada){
+                cambiarEntriopia(
+                  celdaDOWN, 
+                  reglasActuales['DOWN'], 
+                  'UP');
               }
             };  
 
@@ -150,6 +197,10 @@ function draw() {
               const indiceLEFT = (x - 1) + y * RETICULA;
               const celdaLEFT = celdas[indiceLEFT];
               if(!celdaLEFT.colapsada){
+                cambiarEntriopia(
+                  celdaLEFT, 
+                  reglasActuales['LEFT'], 
+                  'RIGHT');
               }
             };
 
@@ -158,14 +209,13 @@ function draw() {
     
     }
 
-    noLoop();
+    //noLoop();
   }
 }
-function cambiarEntriopia(_celda){
+function cambiarEntriopia(_celda, _regla, _opuesta){
   const nuevasOpciones = [];
                 for(let i = 0; i < _celda.opciones.length; i++){
-                  if(reglasActuales['UP']==
-                  reglas[_celda.opciones[i]['DOWN']]
+                  if(_regla == reglas[_celda.opciones[i][_opuesta]]
                   ){
                     const celdaCompatible = _celda.opciones[i];
                     nuevasOpciones.push(celdaCompatible);
